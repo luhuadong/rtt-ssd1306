@@ -1,5 +1,19 @@
-#include <string.h>
-#include <stdio.h>
+/*
+ * Copyright (c) 2020, RudyLo <luhuadong@163.com>
+ *
+ * SPDX-License-Identifier: MIT License
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-11-15     luhuadong    the first version
+ */
+
+#include <rtthread.h>
+#include <rtdevice.h>
+#include <board.h>
+
+//#include <string.h>
+//#include <stdio.h>
 #include "ssd1306.h"
 #include "ssd1306_tests.h"
 
@@ -155,3 +169,6 @@ void ssd1306_TestAll() {
     HAL_Delay(3000);
 }
 
+#ifdef FINSH_USING_MSH
+MSH_CMD_EXPORT(ssd1306_TestAll, test ssd1306 oled driver);
+#endif
