@@ -11,7 +11,7 @@
 //#define STM32F1
 //#define STM32F4
 //#define STM32L0
-#define STM32L4
+//#define STM32L4
 //#define STM32F3
 //#define STM32H7
 //#define STM32F7

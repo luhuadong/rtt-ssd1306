@@ -25,6 +25,10 @@
 
 #if defined(SSD1306_USE_I2C)
 
+#define SSD1306_CTRL_CMD     0x00
+#define SSD1306_CTRL_DATA    0x40
+#define SSD1306_MASK_CONT    (0x1<<7)
+
 static struct rt_i2c_bus_device *i2c_bus;
 
 void ssd1306_Reset(void) {
@@ -37,7 +41,7 @@ void ssd1306_WriteCommand(uint8_t byte)
 #if PKG_USING_SSD1306_HW_I2C
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
 #else
-    uint8_t buf[2] = {0x00, byte};
+    uint8_t buf[2] = {SSD1306_CTRL_CMD, byte};
     rt_i2c_master_send(i2c_bus, SSD1306_I2C_ADDR, RT_I2C_WR, buf, 2);
 #endif    
 }
@@ -50,7 +54,7 @@ void ssd1306_WriteData(uint8_t* buffer, size_t buff_size)
 #else
     for (int i=0; i<buff_size; i++)
     {
-        uint8_t buf[2] = {0x40, buffer[i]};
+        uint8_t buf[2] = {SSD1306_CTRL_DATA, buffer[i]};
         rt_i2c_master_send(i2c_bus, SSD1306_I2C_ADDR, RT_I2C_WR, buf, 2);
     }
 #endif
@@ -64,9 +68,9 @@ void ssd1306_Reset(void) {
 
     // Reset the OLED
     HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_RESET);
-    HAL_Delay(10);
+    rt_thread_mdelay(10);
     HAL_GPIO_WritePin(SSD1306_Reset_Port, SSD1306_Reset_Pin, GPIO_PIN_SET);
-    HAL_Delay(10);
+    rt_thread_mdelay(10);
 }
 
 // Send a byte to the command register
@@ -122,7 +126,7 @@ void ssd1306_Init(void)
     ssd1306_Reset();
 
     // Wait for the screen to boot
-    HAL_Delay(100);
+    rt_thread_mdelay(100);
 
     // Init OLED
     ssd1306_SetDisplayOn(0); //display off
