@@ -12,12 +12,13 @@
 #include <rtdevice.h>
 #include <board.h>
 
-//#include <string.h>
-//#include <stdio.h>
+#include <string.h>
+#include <stdio.h>
 #include "ssd1306.h"
 #include "ssd1306_tests.h"
 
-void ssd1306_TestBorder() {
+void ssd1306_TestBorder() 
+{
     ssd1306_Fill(Black);
    
     uint32_t start = HAL_GetTick();

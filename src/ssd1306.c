@@ -1,22 +1,59 @@
+/*
+ * Copyright (c) 2020, RudyLo <luhuadong@163.com>
+ *
+ * SPDX-License-Identifier: MIT License
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-11-15     luhuadong    the first version
+ */
+
+#include <rtthread.h>
+#include <rtdevice.h>
 #include "ssd1306.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>  // For memcpy
 
+#define DBG_TAG      "pkgs.ssd1306"
+#ifdef PKG_USING_SSD1306_DEBUG
+#define DBG_LVL      DBG_LOG
+#else
+#define DBG_LVL      DBG_ERROR
+#endif
+#include <rtdbg.h>
+
 #if defined(SSD1306_USE_I2C)
+
+static struct rt_i2c_bus_device *i2c_bus;
 
 void ssd1306_Reset(void) {
     /* for I2C - do nothing */
 }
 
 // Send a byte to the command register
-void ssd1306_WriteCommand(uint8_t byte) {
+void ssd1306_WriteCommand(uint8_t byte) 
+{
+#if PKG_USING_SSD1306_HW_I2C
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x00, 1, &byte, 1, HAL_MAX_DELAY);
+#else
+    uint8_t buf[2] = {0x00, byte};
+    rt_i2c_master_send(i2c_bus, SSD1306_I2C_ADDR, RT_I2C_WR, buf, 2);
+#endif    
 }
 
 // Send data
-void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) {
+void ssd1306_WriteData(uint8_t* buffer, size_t buff_size) 
+{
+#if PKG_USING_SSD1306_HW_I2C
     HAL_I2C_Mem_Write(&SSD1306_I2C_PORT, SSD1306_I2C_ADDR, 0x40, 1, buffer, buff_size, HAL_MAX_DELAY);
+#else
+    for (int i=0; i<buff_size; i++)
+    {
+        uint8_t buf[2] = {0x40, buffer[i]};
+        rt_i2c_master_send(i2c_bus, SSD1306_I2C_ADDR, RT_I2C_WR, buf, 2);
+    }
+#endif
 }
 
 #elif defined(SSD1306_USE_SPI)
@@ -70,7 +107,17 @@ SSD1306_Error_t ssd1306_FillBuffer(uint8_t* buf, uint32_t len) {
 }
 
 // Initialize the oled screen
-void ssd1306_Init(void) {
+void ssd1306_Init(void) 
+{
+#if defined(SSD1306_USE_I2C)
+    i2c_bus = (struct rt_i2c_bus_device *)rt_device_find(PKG_USING_SSD1306_I2C_BUS_NAME);
+    if (i2c_bus == RT_NULL)
+    {
+        LOG_E("can not find %s device", PKG_USING_SSD1306_I2C_BUS_NAME);
+        return;
+    }
+#endif
+
     // Reset OLED
     ssd1306_Reset();
 
