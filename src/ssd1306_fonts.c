@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2020, RudyLo <luhuadong@163.com>
+ *
+ * SPDX-License-Identifier: MIT License
+ *
+ * Change Logs:
+ * Date           Author       Notes
+ * 2020-11-15     luhuadong    the first version
+ */
 
 #include "ssd1306_fonts.h"
 

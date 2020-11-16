@@ -123,6 +123,7 @@ typedef struct {
     uint8_t Initialized;
     uint8_t DisplayOn;
 } SSD1306_t;
+
 typedef struct {
     uint8_t x;
     uint8_t y;

@@ -42,7 +42,83 @@ RT-Thread online packages --->
 
 
 
-## 3、联系方式
+## 3、API 说明
+
+### 初始化
+
+```c
+void ssd1306_Init(void);
+```
+
+### 填充
+
+```c
+void ssd1306_Fill(SSD1306_COLOR color);
+```
+
+### 刷新屏幕
+
+```c
+void ssd1306_UpdateScreen(void);
+```
+
+### 画像素
+
+```c
+void ssd1306_DrawPixel(uint8_t x, uint8_t y, SSD1306_COLOR color);
+```
+
+### 打印字符
+
+```c
+char ssd1306_WriteChar(char ch, FontDef Font, SSD1306_COLOR color);
+```
+
+### 打印字符串
+
+```c
+char ssd1306_WriteString(char* str, FontDef Font, SSD1306_COLOR color);
+```
+
+### 设置光标
+
+```c
+void ssd1306_SetCursor(uint8_t x, uint8_t y);
+```
+
+### 画直线
+
+```c
+void ssd1306_Line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+```
+
+### 画弧线
+
+```c
+void ssd1306_DrawArc(uint8_t x, uint8_t y, uint8_t radius, uint16_t start_angle, uint16_t sweep, SSD1306_COLOR color);
+```
+
+### 画圆
+
+```c
+void ssd1306_DrawCircle(uint8_t par_x, uint8_t par_y, uint8_t par_r, SSD1306_COLOR color);
+```
+
+### 画折线
+
+```c
+void ssd1306_Polyline(const SSD1306_VERTEX *par_vertex, uint16_t par_size, SSD1306_COLOR color);
+```
+
+### 画矩形
+
+```c
+void ssd1306_DrawRectangle(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, SSD1306_COLOR color);
+```
+
+
+
+## 4、联系方式
 
 - 维护：luhuadong@163.com
 - 主页：<https://github.com/luhuadong/rtt-ssd1306>
