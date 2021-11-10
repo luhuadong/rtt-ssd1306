@@ -21,7 +21,7 @@ void ssd1306_TestBorder()
 {
     ssd1306_Fill(Black);
 
-    uint32_t start = HAL_GetTick();
+    uint32_t start = rt_tick_get();
     uint32_t end = start;
     uint8_t x = 0;
     uint8_t y = 0;
@@ -40,11 +40,11 @@ void ssd1306_TestBorder()
         ssd1306_DrawPixel(x, y, White);
         ssd1306_UpdateScreen();
     
-        HAL_Delay(5);
-        end = HAL_GetTick();
+        rt_thread_mdelay(5);
+        end = rt_tick_get();
     } while((end - start) < 8000);
    
-    HAL_Delay(1000);
+    rt_thread_mdelay(1000);
 }
 
 void ssd1306_TestFonts()
@@ -65,7 +65,7 @@ void ssd1306_TestFPS()
 {
     ssd1306_Fill(White);
    
-    uint32_t start = HAL_GetTick();
+    uint32_t start = rt_tick_get();
     uint32_t end = start;
     int fps = 0;
     char message[] = "ABCDEFGHIJK";
@@ -83,10 +83,10 @@ void ssd1306_TestFPS()
         message[sizeof(message)-2] = ch;
 
         fps++;
-        end = HAL_GetTick();
+        end = rt_tick_get();
     } while((end - start) < 5000);
    
-    HAL_Delay(1000);
+    rt_thread_mdelay(1000);
 
     char buff[64];
     fps = (float)fps / ((end - start) / 1000.0);
@@ -160,29 +160,29 @@ void ssd1306_TestAll()
     ssd1306_Init();
 
     ssd1306_TestFPS();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 
     ssd1306_TestBorder();
 
     ssd1306_TestFonts();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 
     ssd1306_Fill(Black);
     ssd1306_TestRectangle();
     ssd1306_TestLine();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 
     ssd1306_Fill(Black);
     ssd1306_TestPolyline();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 
     ssd1306_Fill(Black);
     ssd1306_TestArc();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 
     ssd1306_Fill(Black);
     ssd1306_TestCircle();
-    HAL_Delay(3000);
+    rt_thread_mdelay(3000);
 }
 
 #ifdef FINSH_USING_MSH
